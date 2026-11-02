@@ -47,7 +47,7 @@ export default function ForgotPassword() {
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070"
             className="w-full h-full object-cover opacity-30 grayscale"
-            alt="Doksanlarb-Finance HQ"
+            alt="Crown Summit Bank HQ"
           />
           <div className="absolute inset-0 bg-linear-to-br from-blue-900/40 via-slate-950 to-slate-950" />
         </div>
@@ -99,8 +99,8 @@ export default function ForgotPassword() {
                     Forgot Password?
                   </h1>
                   <p className="text-slate-500 font-medium">
-                    Please enter the email associated with your
-                    Doksanlarb-Finance account.
+                    Please enter the email associated with your Crown Summit
+                    Bank account.
                   </p>
                 </div>
 
@@ -119,7 +119,7 @@ export default function ForgotPassword() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-12 pr-4 py-5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-950 font-medium focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 focus:bg-white outline-none transition-all"
-                        placeholder="e.g. name@doksanlarb-finance.com"
+                        placeholder="e.g. name@Crown Summit Bank.com"
                       />
                     </div>
                   </div>

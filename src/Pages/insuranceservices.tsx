@@ -109,7 +109,7 @@ export default function InsurancePage() {
               <img
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1200"
                 className="w-full h-full object-cover grayscale-[0.2]"
-                alt="Doksanlarb-Finance Expert Advisor"
+                alt="Crown Summit Bank Expert Advisor"
               />
               <div className="absolute inset-0 bg-linear-to-t from-blue-900/60 via-transparent to-transparent" />
               <div className="absolute bottom-8 left-8 right-8 p-6 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20">
@@ -120,7 +120,7 @@ export default function InsurancePage() {
                   </span>
                 </div>
                 <p className="text-[10px] text-slate-300 font-medium leading-relaxed">
-                  All Doksanlarb-Finance policies are backed by Tier-1
+                  All Crown Summit Bank policies are backed by Tier-1
                   reinsurance capital and Basel III compliance.
                 </p>
               </div>
@@ -184,7 +184,7 @@ export default function InsurancePage() {
           <div className="lg:col-span-1">
             <ShieldAlert size={56} className="text-blue-500 mb-8" />
             <h2 className="text-5xl font-black text-white tracking-tighter mb-6 italic">
-              The Doksanlarb-Finance <br /> Guarantee.
+              The Crown Summit Bank <br /> Guarantee.
             </h2>
             <p className="text-slate-400 font-medium text-lg leading-relaxed">
               When crisis strikes, our Rapid Response claims desk activates

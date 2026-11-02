@@ -51,7 +51,7 @@ const AdminLoginPage = () => {
             Admin Portal
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Doksanlarb-Finance Internal System
+            Crown Summit Bank Internal System
           </p>
         </div>
 

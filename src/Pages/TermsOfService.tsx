@@ -8,7 +8,7 @@
 //     {
 //       title: "Account Establishment & Verification",
 //       icon: <Terminal size={20} />,
-//       desc: "Private institutional accounts require absolute validation of cross-border identities under regulatory Tier-1 capital compliance checks. Doksanlarb-Finance reserves the autonomous right to reject architecture provisioning to unverified or multi-jurisdictional anonymous entities.",
+//       desc: "Private institutional accounts require absolute validation of cross-border identities under regulatory Tier-1 capital compliance checks. Crown Summit Bank reserves the autonomous right to reject architecture provisioning to unverified or multi-jurisdictional anonymous entities.",
 //     },
 //     {
 //       title: "Liquidity Protocols & Execution",
@@ -64,7 +64,7 @@
 //       <section className="py-24 bg-white">
 //         <div className="max-w-4xl mx-auto px-6">
 //           <p className="text-xl text-slate-600 leading-relaxed mb-16 font-light">
-//             By initializing our systems or interacting with Doksanlarb-Finance
+//             By initializing our systems or interacting with Crown Summit Bank
 //             nodes, you accept structural compliance protocols governing
 //             institutional actions, asset management boundaries, and security
 //             measures.
@@ -119,7 +119,7 @@ export default function TermsOfService() {
     {
       title: "Account Establishment & Verification",
       icon: <Terminal size={20} />,
-      desc: "Private institutional accounts require absolute validation of cross-border identities under regulatory Tier-1 capital compliance checks. Doksanlarb-Finance reserves the autonomous right to reject architecture provisioning to unverified or multi-jurisdictional anonymous entities.",
+      desc: "Private institutional accounts require absolute validation of cross-border identities under regulatory Tier-1 capital compliance checks. Crown Summit Bank reserves the autonomous right to reject architecture provisioning to unverified or multi-jurisdictional anonymous entities.",
     },
     {
       title: "Liquidity Protocols & Execution",
@@ -142,7 +142,7 @@ export default function TermsOfService() {
           <img
             src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=2071"
             className="w-full h-full object-cover object-center grayscale-[0.2] contrast-[1.15] scale-105"
-            alt="Doksanlarb-Finance Global Clearing Node"
+            alt="Crown Summit Bank Global Clearing Node"
           />
           {/* Layered Vignette for Absolute Typography Readability */}
           <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/85 to-slate-950" />
@@ -187,7 +187,7 @@ export default function TermsOfService() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-xl text-slate-600 leading-relaxed mb-16 font-light">
-            By initializing our systems or interacting with Doksanlarb-Finance
+            By initializing our systems or interacting with Crown Summit Bank
             nodes, you accept structural compliance protocols governing
             institutional actions, asset management boundaries, and security
             measures.

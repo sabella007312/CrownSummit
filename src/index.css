@@ -11,6 +11,10 @@ html {
   scroll-behavior: smooth;
   background-color: black;
 }
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
 
 /* Add this to your index.css */
 @keyframes shine {

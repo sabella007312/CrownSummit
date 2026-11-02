@@ -80,7 +80,7 @@ export default function UpdatePassword() {
             Secure Your Legacy.
           </h2>
           <p className="text-slate-400 leading-relaxed font-medium">
-            Your new password must be unique and robust. Doksanlarb-Finance
+            Your new password must be unique and robust. Crown Summit Bank
             utilizes military-grade encryption to ensure your credentials remain
             private.
           </p>

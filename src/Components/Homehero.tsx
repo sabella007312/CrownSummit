@@ -91,16 +91,16 @@ export default function Hero() {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white shadow-sm border border-slate-100 mb-10">
+              {/* <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white shadow-sm border border-slate-100 mb-10">
                 <div className="text-blue-700">{slides[index].icon}</div>
                 <div className="h-4 w-px bg-slate-200" />
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">
                   Est. 1990 • Global Tier 1 Bank
                 </span>
-              </div>
+              </div> */}
 
               {/* Title: Black on White (Best Contrast) */}
-              <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.95] mb-8 tracking-tighter italic">
+              <h1 className="text-6xl font-black md:text-8xl  text-white leading-[0.95] mb-8 tracking-tighter italic">
                 {slides[index].title}
               </h1>
 

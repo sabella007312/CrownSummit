@@ -183,7 +183,7 @@ export default function Services() {
             </h1>
 
             <p className="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-2xl font-medium">
-              Doksanlarb-Finance provides the infrastructure for your global
+              Crown Summit Bank provides the infrastructure for your global
               lifestyle. Our card suites are engineered for resilience, speed,
               and absolute security.
             </p>
@@ -360,7 +360,7 @@ export default function Services() {
                 </span>
               </h2>
               <p className="text-blue-100/70 max-w-xl mx-auto mb-14 text-lg font-medium leading-relaxed">
-                Join the global elite who rely on Doksanlarb-Finance for
+                Join the global elite who rely on Crown Summit Bank for
                 cross-border capital management and asset protection.
               </p>
               <Link

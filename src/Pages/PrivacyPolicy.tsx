@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="prose prose-slate max-w-none space-y-16">
             <p className="text-xl text-slate-600 leading-relaxed font-light">
-              At Doksanlarb-Finance, physical wealth protection and digital data
+              At Crown Summit Bank, physical wealth protection and digital data
               integrity are treated as a unified operational layer. This policy
               defines how our global data architecture aggregates, shields, and
               audits structural information.

@@ -41,7 +41,7 @@ export default function AboutUs() {
         <div className="absolute inset-0 z-0 opacity-40">
           <img
             src="https://images.unsplash.com/photo-1554469384-e58fac16e23a?q=80&w=2074" // High-angle skyscraper architecture
-            alt="Doksanlarb-Finance Headquarters"
+            alt="Crown Summit Bank Headquarters"
             className="w-full h-full object-cover scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/80 to-slate-950/20"></div>
@@ -64,9 +64,9 @@ export default function AboutUs() {
               Legacy of <span className="text-blue-500 italic">Trust.</span>
             </h1>
             <p className="text-xl text-slate-300 max-w-xl mx-auto leading-relaxed mb-12">
-              Discover the principles, history, and vision that drive
-              Doksanlarb-Finance to protect your wealth and empower your
-              ambition in a global economy.
+              Discover the principles, history, and vision that drive Crown
+              Summit Bank to protect your wealth and empower your ambition in a
+              global economy.
             </p>
           </motion.div>
         </div>
@@ -200,7 +200,7 @@ export default function AboutUs() {
               </h2>
 
               <p className="text-slate-300 mb-8 leading-relaxed text-lg">
-                The Doksanlarb-Finance leadership team is comprised of seasoned
+                The Crown Summit Bank leadership team is comprised of seasoned
                 financial experts, technologists, and risk managers who ensure
                 our institution maintains its AAA+ stability while leading in
                 fintech innovation.
@@ -266,7 +266,7 @@ export default function AboutUs() {
               <h2 className="text-5xl md:text-7xl font-black text-white leading-[1.1] tracking-tighter mb-8 max-w-4xl mx-auto">
                 Secure your legacy with <br />
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 via-indigo-200 to-white">
-                  Doksanlarb-Finance.
+                  Crown Summit Bank.
                 </span>
               </h2>
 

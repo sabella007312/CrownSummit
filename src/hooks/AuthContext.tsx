@@ -1,11 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 // FIXED: Changed 'User' to 'type User' to satisfy verbatimModuleSyntax
-import { createClient, type User } from "@supabase/supabase-js";
+import { type User } from "@supabase/supabase-js";
+import { supabase } from "./supabase";
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
+// const supabase = createClient(
+//   import.meta.env.VITE_SUPABASE_URL,
+//   import.meta.env.VITE_SUPABASE_ANON_KEY,
+// );
+
+// const supabase = supabase();
 
 interface AuthContextType {
   user: User | null;

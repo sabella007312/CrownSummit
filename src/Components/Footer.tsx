@@ -31,14 +31,15 @@ const Footer = () => {
           <div className="flex flex-col space-y-6 sm:col-span-2 md:col-span-1">
             <span className="flex flex-row items-center gap-3">
               <img
-                src="favicon.png"
-                alt="Doksanlarb-Finance Logo"
+                src="favicon.jpg"
+                alt="Crown Summit Bank Logo"
                 className="w-10 h-10 drop-shadow-xl rounded-full bg-linear-to-tr from-blue-500 to-indigo-500 p-0.5"
+                loading="lazy"
               />
               <h3 className="text-xl font-black tracking-tight italic bg-linear-to-tr from-white via-slate-200 to-slate-400 bg-clip-text text-transparent drop-shadow-sm">
-                Doksanlarb-
+                Crown Summit{" "}
                 <span className="text-blue-500 not-italic font-light block sm:inline">
-                  Finance
+                  Bank
                 </span>
               </h3>
             </span>
@@ -253,7 +254,7 @@ const Footer = () => {
 
         {/* Bottom Utility Bar / Copyright */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 text-xs text-slate-500">
-          <p>&copy; {currentYear} Doksanlarb-Finance. All rights reserved.</p>
+          <p>&copy; {currentYear} Crown Summit Bank. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link
               to="/privacy-policy"

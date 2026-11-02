@@ -239,7 +239,7 @@ const TransferModal: React.FC<TransferModalProps> = ({
                     Security Portal
                   </h2>
                   <p className="text-slate-400 text-[10px] font-bold tracking-[0.3em] uppercase mt-2">
-                    Doksanlarb-Finance Institutional Wire
+                    Crown Summit Bank Institutional Wire
                   </p>
                 </div>
               )}

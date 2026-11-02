@@ -125,13 +125,13 @@ const LoginPage = () => {
         <img
           src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
-          alt="Doksanlarb-Finance HQ"
+          alt="Crown Summit Bank HQ"
         />
         <div className="relative z-10 p-12 xl:p-20 flex flex-col justify-between h-full w-full">
           {/* <Link to="/" className="flex items-center gap-3 group pt-18">
             <Landmark className="text-blue-500 w-10 h-10 group-hover:rotate-12 transition-transform" />
             <span className="text-2xl xl:text-3xl font-black text-white tracking-tighter uppercase ">
-              Doksanlarb-Finance{" "}
+              Crown Summit Bank{" "}
             </span>
           </Link> */}
 
@@ -161,7 +161,7 @@ const LoginPage = () => {
           {/* <div className="flex lg:hidden items-center justify-center gap-2 mb-8">
             <Landmark className="text-blue-600 w-8 h-8" />
             <span className="text-xl font-black text-slate-900 tracking-tighter uppercase">
-              Doksanlarb-Finance
+              Crown Summit Bank
             </span>
           </div> */}
 
@@ -205,7 +205,7 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 p-3.5 sm:p-4 pl-12 rounded-xl sm:rounded-2xl outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all font-medium text-sm sm:text-base"
-                    placeholder="client@Doksanlarb-Finance.com"
+                    placeholder="client@Crown Summit Bank.com"
                     required
                   />
                 </div>
@@ -271,7 +271,7 @@ const LoginPage = () => {
 
               <div className="h-px w-full bg-slate-100 relative">
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[9px] font-black text-slate-300 uppercase tracking-widest whitespace-nowrap">
-                  New to Doksanlarb-Finance?
+                  New to Crown Summit Bank?
                 </span>
               </div>
 

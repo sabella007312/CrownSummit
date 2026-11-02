@@ -103,10 +103,10 @@ export default function Home() {
                 title="Over 30 Years of Institutional Excellence"
               />
               <p className="text-xl text-slate-600 leading-relaxed mb-10">
-                Since 1990, Doksanlarb-Finance has served as a global
-                cornerstone of financial stability. We combine traditional
-                wealth protection with high-velocity digital infrastructure to
-                empower the modern investor.
+                Since 1990, Crown Summit Bank has served as a global cornerstone
+                of financial stability. We combine traditional wealth protection
+                with high-velocity digital infrastructure to empower the modern
+                investor.
               </p>
               <div className="space-y-4 mb-10">
                 {[
@@ -144,7 +144,7 @@ export default function Home() {
               <img
                 src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070"
                 className="rounded-[3rem] shadow-2xl relative z-10 border-12 border-white"
-                alt="Doksanlarb-Finance Headquarters"
+                alt="Crown Summit Bank Headquarters"
                 loading="lazy"
               />
               <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-10"></div>
@@ -215,7 +215,7 @@ export default function Home() {
             <img
               src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070"
               className="w-full h-full object-cover grayscale-[0.3] contrast-[1.1]"
-              alt="Doksanlarb-Finance Global HQ"
+              alt="Crown Summit Bank Global HQ"
             />
             {/* Multi-layered Vignette for Text Readability */}
             <div className="absolute inset-0 bg-linear-to-br from-slate-950 via-slate-950/90 to-blue-900/40" />

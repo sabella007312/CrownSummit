@@ -937,7 +937,7 @@ const SignupPage = () => {
           )}
         </motion.div>
         <p className="mt-12 text-[10px] font-bold text-slate-300 uppercase tracking-[0.5em]">
-          Doksanlarb-Finance Institutional Portal v4.2
+          Crown Summit Bank Institutional Portal v4.2
         </p>
       </section>
     </main>

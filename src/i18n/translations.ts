@@ -31,19 +31,19 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     home_legacy_subtitle: "Our Legacy",
     home_legacy_title: "Over 30 Years of Institutional Excellence",
     home_legacy_text:
-      "Since 1990, Doksanlarb-Finance has served as a global cornerstone of financial stability.",
+      "Since 1990, Crown Summit Bank has served as a global cornerstone of financial stability.",
     home_bullet_1: "Tier-1 Capital Ratios",
     home_bullet_2: "Global Asset Custody",
     home_bullet_3: "Bespoke Wealth Advisory",
     about_hero_title: "Legacy of Trust.",
     about_hero_text:
-      "Discover the principles, history, and vision that drive Doksanlarb-Finance.",
+      "Discover the principles, history, and vision that drive Crown Summit Bank.",
     about_section_title: "Thirty Years of Stability and Evolution",
     about_section_text:
       "Founded as a specialized commercial lender focused on local market stability.",
     services_hero_title: "Capital Without Borders.",
     services_hero_text:
-      "Doksanlarb-Finance provides the infrastructure for your global lifestyle.",
+      "Crown Summit Bank provides the infrastructure for your global lifestyle.",
     contact_hero_title: "Personalized Partnership.",
     contact_hero_text:
       "Our dedicated asset managers are available globally to ensure your institutional needs are met.",
@@ -55,10 +55,10 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     login_button: "Secure Login",
     login_forgot: "Forgot Password?",
     signup_title: "Create your account",
-    signup_text: "Start your private banking journey with Doksanlarb-Finance.",
+    signup_text: "Start your private banking journey with Crown Summit Bank.",
     forgot_title: "Forgot Password?",
     forgot_text:
-      "Please enter the email associated with your Doksanlarb-Finance account.",
+      "Please enter the email associated with your Crown Summit Bank account.",
     update_title: "Set New Password",
     update_text:
       "Create a strong password to protect your institutional assets.",
@@ -73,15 +73,15 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
       "We provide the financial engineering required to protect, grow, and transition institutional-scale capital.",
     privacy_title: "Privacy & Asset Data Policy.",
     privacy_intro:
-      "At Doksanlarb-Finance, physical wealth protection and digital data integrity are treated as a unified operational layer.",
+      "At Crown Summit Bank, physical wealth protection and digital data integrity are treated as a unified operational layer.",
     terms_title: "Terms of Global Service.",
     terms_intro:
-      "By interacting with Doksanlarb-Finance, you accept compliance protocols governing institutional actions.",
+      "By interacting with Crown Summit Bank, you accept compliance protocols governing institutional actions.",
     cookie_title: "Cookie & Telemetry Preferences.",
     cookie_intro:
       "Adjust your baseline configuration tracking layers and preference settings.",
     admin_portal_title: "Admin Portal",
-    admin_portal_text: "Doksanlarb-Finance Internal System",
+    admin_portal_text: "Crown Summit Bank Internal System",
     admin_username: "Username",
     admin_password: "Password",
     admin_signin: "Sign In",
@@ -115,19 +115,19 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     home_legacy_subtitle: "Mirasımız",
     home_legacy_title: "30 Yılı Aşkın Kurumsal Mükemmellik",
     home_legacy_text:
-      "1990'dan beri Doksanlarb-Finance finansal istikrarın küresel bir mihenk taşı olmuştur.",
+      "1990'dan beri Crown Summit Bank finansal istikrarın küresel bir mihenk taşı olmuştur.",
     home_bullet_1: "Tier-1 Sermaye Oranları",
     home_bullet_2: "Küresel Varlık Saklama",
     home_bullet_3: "Özel Varlık Danışmanlığı",
     about_hero_title: "Güven Mirası.",
     about_hero_text:
-      "Doksanlarb-Finance'ı yönlendiren ilke, tarih ve vizyonu keşfedin.",
+      "Crown Summit Bank'ı yönlendiren ilke, tarih ve vizyonu keşfedin.",
     about_section_title: "İstikrar ve Evrimin Otuz Yılı",
     about_section_text:
       "Yerel pazar istikrarına odaklanan özel bir ticari kredi kuruluşu olarak kuruldu.",
     services_hero_title: "Sınırlar Olmaksızın Sermaye.",
     services_hero_text:
-      "Doksanlarb-Finance, küresel yaşam tarzınız için altyapı sağlar.",
+      "Crown Summit Bank, küresel yaşam tarzınız için altyapı sağlar.",
     contact_hero_title: "Kişiselleştirilmiş Ortaklık.",
     contact_hero_text:
       "Kurumsal ihtiyaçlarınızın karşılanmasını sağlamak için varlık yöneticilerimiz küresel olarak hizmet vermektedir.",
@@ -140,9 +140,9 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     login_forgot: "Şifremi Unuttum?",
     signup_title: "Hesabınızı Oluşturun",
     signup_text:
-      "Doksanlarb-Finance ile özel bankacılık yolculuğunuza başlayın.",
+      "Crown Summit Bank ile özel bankacılık yolculuğunuza başlayın.",
     forgot_title: "Şifremi Unuttum?",
-    forgot_text: "Doksanlarb-Finance hesabınızla ilişkili e-postayı girin.",
+    forgot_text: "Crown Summit Bank hesabınızla ilişkili e-postayı girin.",
     update_title: "Yeni Şifre Belirle",
     update_text:
       "Kurumsal varlıklarınızı korumak için güçlü bir şifre oluşturun.",
@@ -157,15 +157,15 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
       "Kurumsal ölçekli sermayeyi korumak, büyütmek ve devretmek için finansal mühendislik sağlıyoruz.",
     privacy_title: "Gizlilik ve Varlık Veri Politikası.",
     privacy_intro:
-      "Doksanlarb-Finance'de fiziksel varlık koruması ve dijital veri bütünlüğü birleşik bir operasyonel katman olarak ele alınır.",
+      "Crown Summit Bank'de fiziksel varlık koruması ve dijital veri bütünlüğü birleşik bir operasyonel katman olarak ele alınır.",
     terms_title: "Küresel Hizmet Şartları.",
     terms_intro:
-      "Doksanlarb-Finance ile etkileşime girerek kurumsal eylemleri yöneten uyum protokollerini kabul edersiniz.",
+      "Crown Summit Bank ile etkileşime girerek kurumsal eylemleri yöneten uyum protokollerini kabul edersiniz.",
     cookie_title: "Çerez ve Telemetri Tercihleri.",
     cookie_intro:
       "Temel yapılandırma izleme katmanlarınızı ve tercih ayarlarınızı ayarlayın.",
     admin_portal_title: "Yönetici Portalı",
-    admin_portal_text: "Doksanlarb-Finance İç Sistemi",
+    admin_portal_text: "Crown Summit Bank İç Sistemi",
     admin_username: "Kullanıcı Adı",
     admin_password: "Şifre",
     admin_signin: "Giriş Yap",
@@ -199,19 +199,19 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     home_legacy_subtitle: "Nuestro Legado",
     home_legacy_title: "Más de 30 Años de Excelencia Institucional",
     home_legacy_text:
-      "Desde 1990, Doksanlarb-Finance ha sido un pilar global de estabilidad financiera.",
+      "Desde 1990, Crown Summit Bank ha sido un pilar global de estabilidad financiera.",
     home_bullet_1: "Ratios de Capital Tier-1",
     home_bullet_2: "Custodia Global de Activos",
     home_bullet_3: "Asesoría Patrimonial a Medida",
     about_hero_title: "Legado de Confianza.",
     about_hero_text:
-      "Descubre los principios, la historia y la visión que impulsan a Doksanlarb-Finance.",
+      "Descubre los principios, la historia y la visión que impulsan a Crown Summit Bank.",
     about_section_title: "Treinta Años de Estabilidad y Evolución",
     about_section_text:
       "Fundada como prestamista comercial especializado enfocado en la estabilidad del mercado local.",
     services_hero_title: "Capital Sin Fronteras.",
     services_hero_text:
-      "Doksanlarb-Finance proporciona infraestructura para tu estilo de vida global.",
+      "Crown Summit Bank proporciona infraestructura para tu estilo de vida global.",
     contact_hero_title: "Asociación Personalizada.",
     contact_hero_text:
       "Nuestros gestores de activos están disponibles globalmente para atender tus necesidades institucionales.",
@@ -223,10 +223,10 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     login_button: "Acceso Seguro",
     login_forgot: "¿Olvidaste tu contraseña?",
     signup_title: "Crea tu cuenta",
-    signup_text: "Inicia tu viaje bancario privado con Doksanlarb-Finance.",
+    signup_text: "Inicia tu viaje bancario privado con Crown Summit Bank.",
     forgot_title: "¿Olvidaste tu contraseña?",
     forgot_text:
-      "Introduce el correo electrónico asociado a tu cuenta de Doksanlarb-Finance.",
+      "Introduce el correo electrónico asociado a tu cuenta de Crown Summit Bank.",
     update_title: "Establece una nueva contraseña",
     update_text:
       "Crea una contraseña fuerte para proteger tus activos institucionales.",
@@ -241,15 +241,15 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
       "Ofrecemos ingeniería financiera sofisticada para proteger y hacer crecer capital institucional.",
     privacy_title: "Política de Privacidad y Datos.",
     privacy_intro:
-      "En Doksanlarb-Finance, la protección de la riqueza y la integridad de los datos se tratan como una sola capa.",
+      "En Crown Summit Bank, la protección de la riqueza y la integridad de los datos se tratan como una sola capa.",
     terms_title: "Términos de Servicio Global.",
     terms_intro:
-      "Al interactuar con Doksanlarb-Finance, aceptas los protocolos de cumplimiento.",
+      "Al interactuar con Crown Summit Bank, aceptas los protocolos de cumplimiento.",
     cookie_title: "Preferencias de Cookies y Telemetría.",
     cookie_intro:
       "Ajusta tus capas de seguimiento y preferencias de configuración.",
     admin_portal_title: "Portal Admin",
-    admin_portal_text: "Sistema Interno Doksanlarb-Finance",
+    admin_portal_text: "Sistema Interno Crown Summit Bank",
     admin_username: "Usuario",
     admin_password: "Contraseña",
     admin_signin: "Iniciar Sesión",
@@ -283,19 +283,19 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     home_legacy_subtitle: "Notre Héritage",
     home_legacy_title: "Plus de 30 Ans d'Excellence Institutionnelle",
     home_legacy_text:
-      "Depuis 1990, Doksanlarb-Finance est un pilier mondial de stabilité financière.",
+      "Depuis 1990, Crown Summit Bank est un pilier mondial de stabilité financière.",
     home_bullet_1: "Ratios de Capital Tier-1",
     home_bullet_2: "Garde d'Actifs Globale",
     home_bullet_3: "Conseil Patrimonial Sur Mesure",
     about_hero_title: "Héritage de Confiance.",
     about_hero_text:
-      "Découvrez les principes, l'histoire et la vision qui animent Doksanlarb-Finance.",
+      "Découvrez les principes, l'histoire et la vision qui animent Crown Summit Bank.",
     about_section_title: "Trente Ans de Stabilité et d'Évolution",
     about_section_text:
       "Fondé comme prêteur commercial spécialisé axé sur la stabilité du marché local.",
     services_hero_title: "Capital Sans Frontières.",
     services_hero_text:
-      "Doksanlarb-Finance fournit l'infrastructure pour votre style de vie mondial.",
+      "Crown Summit Bank fournit l'infrastructure pour votre style de vie mondial.",
     contact_hero_title: "Partenariat Personnalisé.",
     contact_hero_text:
       "Nos gestionnaires de patrimoine sont disponibles globalement pour répondre à vos besoins institutionnels.",
@@ -310,7 +310,7 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
     signup_text: "Commencez votre parcours bancaire privé.",
     forgot_title: "Mot de passe oublié ?",
     forgot_text:
-      "Entrez l'adresse e-mail associée à votre compte Doksanlarb-Finance.",
+      "Entrez l'adresse e-mail associée à votre compte Crown Summit Bank.",
     update_title: "Définir un nouveau mot de passe",
     update_text:
       "Créez un mot de passe fort pour protéger vos actifs institutionnels.",
@@ -325,15 +325,15 @@ export const translations: Record<LanguageCode, Record<string, string>> = {
       "Nous fournissons l'ingénierie financière nécessaire pour protéger et faire croître le capital institutionnel.",
     privacy_title: "Politique de Confidentialité et de Données.",
     privacy_intro:
-      "Chez Doksanlarb-Finance, la protection de la richesse et l'intégrité des données sont traitées comme une seule couche.",
+      "Chez Crown Summit Bank, la protection de la richesse et l'intégrité des données sont traitées comme une seule couche.",
     terms_title: "Conditions de Service Globales.",
     terms_intro:
-      "En interagissant avec Doksanlarb-Finance, vous acceptez les protocoles de conformité.",
+      "En interagissant avec Crown Summit Bank, vous acceptez les protocoles de conformité.",
     cookie_title: "Préférences de Cookies et Télémetrie.",
     cookie_intro:
       "Ajustez vos couches de suivi et vos préférences de configuration.",
     admin_portal_title: "Portail Admin",
-    admin_portal_text: "Système Interne Doksanlarb-Finance",
+    admin_portal_text: "Système Interne Crown Summit Bank",
     admin_username: "Nom d'utilisateur",
     admin_password: "Mot de passe",
     admin_signin: "Connexion",

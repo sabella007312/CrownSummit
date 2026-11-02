@@ -433,7 +433,7 @@ export default function CookieSettings() {
           <img
             src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070"
             className="w-full h-full object-cover object-center grayscale-[0.3] contrast-[1.1] scale-102"
-            alt="Doksanlarb-Finance Telemetry Center"
+            alt="Crown Summit Bank Telemetry Center"
           />
           {/* Deep Institutional Vignette Gradients */}
           <div className="absolute inset-0 bg-linear-to-b from-slate-950 via-slate-950/85 to-white" />
