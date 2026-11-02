@@ -364,10 +364,10 @@ const Navbar = () => {
 
             <div className="flex flex-col">
               <div className="flex items-center font-black tracking-tight uppercase italic text-lg md:text-2xl leading-none">
-                <span className="bg-gradient-to-r from-slate-950 via-slate-800 to-slate-900 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-slate-950 via-slate-800 to-slate-900 bg-clip-text text-transparent">
                   Crown Summit
                 </span>
-                <span className="ml-1.5 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <span className="ml-1.5 bg-linear-to-rrom-blue-600 to-blue-800 bg-clip-text text-transparent">
                   Bank
                 </span>
               </div>
@@ -397,7 +397,7 @@ const Navbar = () => {
                       {isActive && (
                         <motion.div
                           layoutId="activeIndicator"
-                          className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-700 rounded-full"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-700 rounded-full"
                           transition={{
                             type: "spring",
                             stiffness: 380,
