@@ -11,7 +11,7 @@ const AdminLoginPage = () => {
 
   const ADMIN_DATA = {
     username: "admin_root",
-    password: "castro123",
+    password: "Kingso2026@",
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
