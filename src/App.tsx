@@ -24,6 +24,7 @@ import AdminLoginPage from "./Pages/AdminLoginPage";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsOfService from "./Pages/TermsOfService";
 import CookieSettings from "./Pages/CookieSettings";
+import EmailConfirmedPage from "./Pages/EmailConfirmedPage";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path="/forgot-password" element={<Forgotpassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path="/wealth-management" element={<WealthManagement />} />
+              <Route path="/email-confirmed" element={<EmailConfirmedPage />} />
               <Route
                 path="/insurance-services"
                 element={<InsuranceServices />}
