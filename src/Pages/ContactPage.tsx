@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
-  Phone,
   ArrowRight,
   Globe,
   ShieldCheck,
@@ -152,28 +151,28 @@ const ContactPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex gap-4 p-6 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-all group">
+              {/* <div className="flex gap-4 p-6 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-all group">
                 <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Phone size={24} />
-                </div>
-                <div>
+                </div> */}
+              {/* <div>
                   <h4 className="font-black text-slate-900 text-sm uppercase">
                     24/7 Priority Line
                   </h4>
                   <a
-                    href="tel:+90 534 393 8840"
+                    href="tel:+1 800 123 4567"
                     className="text-slate-500 text-sm mt-1 hover:text-blue-600 transition-colors block"
                   >
-                    +90 534 393 8840
-                  </a>
-                  {/* <a
+                    +1 800 123 4567
+                  </a> */}
+              {/* <a
                     href="tel:+44 70580267955"
                     className="text-slate-500 text-sm mt-1 hover:text-blue-600 transition-colors block"
                   >
                     +44 70580267955
                   </a> */}
-                </div>
-              </div>
+              {/* </div> */}
+              {/* </div> */}
 
               <div className="flex gap-4 p-6 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-all group">
                 <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -184,10 +183,10 @@ const ContactPage = () => {
                     Secure Email
                   </h4>
                   <a
-                    href="mailto:info@dividendbks.com"
+                    href="mailto:info@crownsummitbnk.com"
                     className="text-slate-500 text-sm mt-1 hover:text-blue-600 transition-colors block"
                   >
-                    info@doksanlarb.com
+                    info@crownsummitbnk.com
                   </a>
                 </div>
               </div>
@@ -198,11 +197,9 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <h4 className="font-black text-slate-900 text-sm uppercase">
-                    Global HQ
+                    123 Financial District New York, NY 10001
                   </h4>
-                  <p className="text-slate-500 text-sm mt-1">
-                    İstanbul, Türkiye
-                  </p>
+                  <p className="text-slate-500 text-sm mt-1">USA</p>
                   {/* <p className="text-slate-500 text-sm mt-1">
                     England, United Kingdom.
                   </p> */}

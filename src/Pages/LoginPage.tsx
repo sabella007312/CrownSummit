@@ -79,7 +79,7 @@ const LoginPage = () => {
       // 4) SUCCESS: trigger Edge Function
       try {
         const functionUrl =
-          "https://fpjxjrcslglswmjdtqve.supabase.co/functions/v1/send-login-email";
+          "https://lgbvxoyntonznxpfmtbq.supabase.co/functions/v1/send-login-email";
 
         const userEmail = user.email;
         if (!userEmail) {

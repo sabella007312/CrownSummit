@@ -13,7 +13,7 @@ import {
   FaInstagram,
   FaFacebookF,
 } from "react-icons/fa";
-import { MapPin, Phone, Mail, ArrowUpRight } from "lucide-react";
+import { MapPin, Mail, ArrowUpRight } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -210,15 +210,15 @@ const Footer = () => {
               >
                 <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
                 <span className="leading-relaxed">
-                  Ziya Gökalp, Süleyman Demirel Blv No:75B, 34490 Başakşehir
+                  123 Financial District New York, NY 10001
                   <span className="text-xs text-slate-500 group-hover:text-blue-400 flex items-center gap-1 mt-0.5">
-                    İstanbul, Türkiye <ArrowUpRight className="w-3 h-3" />
+                    USA <ArrowUpRight className="w-3 h-3" />
                   </span>
                 </span>
               </a>
 
               {/* Phone */}
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-blue-500 shrink-0" />
                 <a
                   href="tel:+905343938840"
@@ -226,7 +226,7 @@ const Footer = () => {
                 >
                   +90 534 393 88 40
                 </a>
-              </div>
+              </div> */}
 
               {/* <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-blue-500 shrink-0" />
@@ -242,10 +242,10 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
                 <a
-                  href="mailto:info@doksanlarb.com"
+                  href="mailto:info@crownsummitbnk.com"
                   className="hover:text-slate-200 transition-colors duration-200 break-all"
                 >
-                  info@doksanlarb.com
+                  info@crownsummitbnk.com
                 </a>
               </div>
             </address>
