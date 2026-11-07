@@ -289,7 +289,7 @@ const LoginPage = () => {
           </motion.div>
 
           <p className="mt-8 text-center text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em]">
-            Regulatory ID: DKS-882-991
+            Regulatory ID: CSB-882-991
           </p>
         </div>
       </section>
