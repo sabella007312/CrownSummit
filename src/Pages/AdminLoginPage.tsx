@@ -23,6 +23,10 @@ const AdminLoginPage = () => {
         formData.username === ADMIN_DATA.username &&
         formData.password === ADMIN_DATA.password
       ) {
+        sessionStorage.setItem(
+          "admin-transfer-credentials",
+          JSON.stringify(ADMIN_DATA),
+        );
         toast.success("Access Granted", {
           description: "Welcome back, Admin. Redirecting...",
         });

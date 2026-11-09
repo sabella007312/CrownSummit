@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // Import useNavigate for routing
 import { useNavigate } from "react-router-dom";
 import DashboardComponent from "../Components/dashboardcomponent";
 import TransferPinsView from "../Components/pincode";
+import TransferRequestsView from "../Components/TransferRequestsView";
 // Import icons for the sidebar
-import { LayoutDashboard, Send, LogOut, Menu, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  Send,
+  ClipboardList,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
 
 export const AdminDashboard = () => {
   // Initialize the navigate function
@@ -13,6 +21,12 @@ export const AdminDashboard = () => {
   // 1. Dynamic State for Navigation
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("admin-transfer-credentials")) {
+      navigate("/admin-login", { replace: true });
+    }
+  }, [navigate]);
 
   // 2. Navigation Configuration
   const navItems = [
@@ -39,6 +53,12 @@ export const AdminDashboard = () => {
         />
       ),
     },
+    {
+      id: "transfer-requests",
+      label: "Transfer Requests",
+      icon: <ClipboardList size={20} />,
+      component: <TransferRequestsView />,
+    },
   ];
 
   // 3. Helper to render the selected component
@@ -51,6 +71,7 @@ export const AdminDashboard = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
+      sessionStorage.removeItem("admin-transfer-credentials");
       navigate("/admin-login");
     }
   };

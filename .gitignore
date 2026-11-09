@@ -24,3 +24,6 @@
 # *.sw?
 node_modules
 .env
+supabase
+README.md
+stats.html

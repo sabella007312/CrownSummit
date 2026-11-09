@@ -532,6 +532,7 @@ const ClientDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [transferRequests, setTransferRequests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentView] = useState<
     "overview" | "client-dashboard" | "transfer-pins"
@@ -596,9 +597,17 @@ const ClientDashboard = () => {
     }),
     amount: `${tx.type === "deposit" ? "+" : "-"}${Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
     type: tx.type,
+    transferRequestId: tx.transfer_request_id || null,
+    transferStatus: tx.transfer_status || null,
+    sortDate: new Date(tx.date).getTime(),
   });
 
   useEffect(() => {
+    let isActive = true;
+    let profileChannel: ReturnType<typeof supabase.channel> | null = null;
+    let txChannel: ReturnType<typeof supabase.channel> | null = null;
+    let transferChannel: ReturnType<typeof supabase.channel> | null = null;
+
     const setupDashboard = async () => {
       try {
         setIsLoading(true);
@@ -609,6 +618,7 @@ const ClientDashboard = () => {
           error: authError,
         } = await supabase.auth.getUser();
 
+        if (!isActive) return;
         if (authError || !user) {
           navigate("/Login");
           return;
@@ -621,6 +631,7 @@ const ClientDashboard = () => {
           .eq("id", user.id)
           .single();
 
+        if (!isActive) return;
         if (profileError || !profileData) {
           console.error("Profile sync error:", profileError);
           return;
@@ -635,6 +646,19 @@ const ClientDashboard = () => {
           .select("*")
           .eq("user_id", user.id)
           .order("date", { ascending: false });
+
+        const { data: transferData, error: transferError } = await supabase
+          .from("transfer_requests")
+          .select("id, recipient, amount, status, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (!isActive) return;
+        if (transferError) {
+          console.error("Transfer history sync error:", transferError);
+        } else {
+          setTransferRequests(transferData || []);
+        }
 
         if (!txError && txData && txData.length > 0) {
           setTransactions(txData.map(formatTransaction));
@@ -651,12 +675,13 @@ const ClientDashboard = () => {
               }),
               amount: `+${Number(profileData.balance).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
               type: "deposit",
+              sortDate: Date.now(),
             },
           ]);
         }
 
         // 4. Real-time Subscription Channel for Profile changes
-        const profileChannel = supabase
+        profileChannel = supabase
           .channel(`db-profile-sync-${user.id}`)
           .on(
             "postgres_changes",
@@ -678,7 +703,7 @@ const ClientDashboard = () => {
           .subscribe();
 
         // 5. Real-time Subscription Channel for NEW dynamic Transaction entries dropping in
-        const txChannel = supabase
+        txChannel = supabase
           .channel(`db-tx-sync-${user.id}`)
           .on(
             "postgres_changes",
@@ -698,10 +723,32 @@ const ClientDashboard = () => {
           )
           .subscribe();
 
-        return () => {
-          supabase.removeChannel(profileChannel);
-          supabase.removeChannel(txChannel);
-        };
+        transferChannel = supabase
+          .channel(`db-transfer-sync-${user.id}`)
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "transfer_requests",
+              filter: `user_id=eq.${user.id}`,
+            },
+            (payload) => {
+              if (payload.eventType === "DELETE") {
+                setTransferRequests((prev) =>
+                  prev.filter((request) => request.id !== payload.old.id),
+                );
+                return;
+              }
+
+              const changedRequest = payload.new as any;
+              setTransferRequests((prev) => [
+                changedRequest,
+                ...prev.filter((request) => request.id !== changedRequest.id),
+              ]);
+            },
+          )
+          .subscribe();
       } catch (err) {
         console.error("Dashboard Setup Error:", err);
       } finally {
@@ -709,7 +756,14 @@ const ClientDashboard = () => {
       }
     };
 
-    setupDashboard();
+    void setupDashboard();
+
+    return () => {
+      isActive = false;
+      if (profileChannel) void supabase.removeChannel(profileChannel);
+      if (txChannel) void supabase.removeChannel(txChannel);
+      if (transferChannel) void supabase.removeChannel(transferChannel);
+    };
   }, [navigate]);
 
   if (isLoading) {
@@ -725,38 +779,55 @@ const ClientDashboard = () => {
     );
   }
 
-  const onTransferSuccess = async (amount: number, recipient: string) => {
-    if (!profile?.id) return;
-
-    const newBalance = balance - amount;
-
-    // 1. Update Profile Balance Total Row
-    const { error: profileError } = await supabase
-      .from("profiles")
-      .update({ balance: newBalance })
-      .eq("id", profile.id);
-
-    if (profileError) {
-      toast.error("Failed to process transaction profile updates.");
-      return;
-    }
-
-    // 2. Insert into Ledger database mapping list rows
-    const { error: txError } = await supabase.from("transactions").insert({
-      user_id: profile.id,
-      name: `Transfer to ${recipient}`,
-      amount: amount,
-      type: "withdrawal",
-      date: new Date().toISOString(),
-    });
-
-    if (!txError) {
-      setBalance(newBalance);
-      toast.success(
-        `Transfer of $${amount.toLocaleString()} to ${recipient} completed successfully!`,
+  const requestStatuses = new Map<string, string>(
+    transferRequests.map((request) => [request.id, request.status]),
+  );
+  const linkedRequestIds = new Set(
+    transactions
+      .map((transaction) => transaction.transferRequestId)
+      .filter(Boolean),
+  );
+  const latestTransactionByRequest = new Map<string, string>();
+  for (const transaction of transactions) {
+    if (
+      transaction.transferRequestId &&
+      !latestTransactionByRequest.has(transaction.transferRequestId)
+    ) {
+      latestTransactionByRequest.set(
+        transaction.transferRequestId,
+        transaction.id,
       );
     }
-  };
+  }
+  const requestHistory = transferRequests
+    .filter((request) => !linkedRequestIds.has(request.id))
+    .map((request) => ({
+      id: `transfer-request-${request.id}`,
+      name: `Transfer to ${request.recipient}`,
+      date: new Date(request.created_at).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      amount: Number(request.amount).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+      }),
+      type: "withdrawal",
+      status: request.status,
+      sortDate: new Date(request.created_at).getTime(),
+    }));
+  const ledgerHistory = [...transactions, ...requestHistory]
+    .map((transaction) => ({
+      ...transaction,
+      status:
+        transaction.transferRequestId &&
+        latestTransactionByRequest.get(transaction.transferRequestId) ===
+          transaction.id
+          ? requestStatuses.get(transaction.transferRequestId) ||
+            transaction.transferStatus
+          : transaction.transferStatus || transaction.status,
+    }))
+    .sort((left, right) => right.sortDate - left.sortDate);
 
   const handleManualSignOut = async () => {
     const signingout = window.confirm("Are you sure you want to sign out?");
@@ -894,7 +965,7 @@ const ClientDashboard = () => {
                     Ledger Activity
                   </h4>
                   <div className="space-y-2">
-                    {transactions.map((tx) => (
+                    {ledgerHistory.map((tx) => (
                       <TransactionRow key={tx.id} tx={tx} />
                     ))}
                   </div>
@@ -973,7 +1044,6 @@ const ClientDashboard = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         currentBalance={balance}
-        onSuccess={onTransferSuccess}
       />
 
       {/* DEPOSIT MODAL */}
@@ -1120,9 +1190,20 @@ const TransactionRow = ({ tx }: any) => (
       </div>
       <div className="flex flex-col">
         <h5 className="text-xs font-black text-slate-900">{tx.name}</h5>
-        <p className="text-[9px] font-black text-slate-400 uppercase">
-          {tx.date}
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-[9px] font-black text-slate-400 uppercase">
+            {tx.date}
+          </p>
+          {tx.status && (
+            <p className="text-[9px] font-black text-blue-600 uppercase">
+              {tx.status === "pending"
+                ? "Pending / Hold"
+                : tx.status === "failed"
+                  ? "Failed"
+                  : tx.status}
+            </p>
+          )}
+        </div>
       </div>
     </div>
     <span

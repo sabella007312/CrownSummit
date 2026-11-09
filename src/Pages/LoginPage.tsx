@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../hooks/supabase";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import {
   // Landmark,
@@ -19,24 +19,113 @@ import {
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otpChallengeId, setOtpChallengeId] = useState<string | null>(null);
+  const [otpExpiresAt, setOtpExpiresAt] = useState<number | null>(null);
+  const [otpSecondsLeft, setOtpSecondsLeft] = useState(0);
+  const [otp, setOtp] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!otpChallengeId || otpExpiresAt === null) return;
+
+    let interval: ReturnType<typeof setInterval> | null = null;
+    const updateCountdown = () => {
+      const remaining = Math.max(
+        0,
+        Math.ceil((otpExpiresAt - Date.now()) / 1000),
+      );
+      setOtpSecondsLeft(remaining);
+
+      if (remaining === 0) {
+        if (interval) clearInterval(interval);
+        setOtpChallengeId(null);
+        setOtpExpiresAt(null);
+        setOtp("");
+        setError(
+          "Your code expired. Enter your credentials to request a new one.",
+        );
+        toast.error("Verification code expired. Please request a new code.");
+      }
+    };
+
+    updateCountdown();
+    interval = setInterval(updateCountdown, 1000);
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [otpChallengeId, otpExpiresAt]);
+
+  const requestOtp = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     setIsLoading(true);
     setError("");
 
     try {
-      // 1) AUTH: sign in
+      const { data, error: requestError } = await supabase.functions.invoke(
+        "login-otp",
+        {
+          body: { action: "request", email: email.trim(), password },
+        },
+      );
+
+      if (requestError) throw requestError;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.challengeId)
+        throw new Error("Could not start OTP verification.");
+      const expiresAt = new Date(data.expiresAt).getTime();
+      if (!Number.isFinite(expiresAt)) {
+        throw new Error("The verification service returned an invalid expiry.");
+      }
+
+      setOtpChallengeId(data.challengeId);
+      setOtpExpiresAt(expiresAt);
+      setOtpSecondsLeft(
+        Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000)),
+      );
+      setOtp("");
+      toast.success(`A six-digit code was sent to ${email.trim()}.`);
+    } catch (err: any) {
+      setError(err?.message || "Unable to send the verification code.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpChallengeId) return;
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { data: verification, error: verificationError } =
+        await supabase.functions.invoke("login-otp", {
+          body: {
+            action: "verify",
+            challengeId: otpChallengeId,
+            code: otp,
+            email: email.trim(),
+            password,
+          },
+        });
+
+      if (verificationError) throw verificationError;
+      if (verification?.error) throw new Error(verification.error);
+      if (!verification?.verified) {
+        throw new Error("The verification code is invalid or expired.");
+      }
+
+      // Establish the persistent session only after OTP verification.
       const {
         data: { user, session },
         error: authError,
       } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
 
@@ -44,7 +133,6 @@ const LoginPage = () => {
       if (!user || !session)
         throw new Error("Login failed. No user session returned.");
 
-      // 2) GATEKEEPER: check profiles status
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("status")
@@ -58,7 +146,6 @@ const LoginPage = () => {
         );
       }
 
-      // 3) ENFORCE STATUS
       if (profile?.status !== "active") {
         await supabase.auth.signOut();
 
@@ -76,7 +163,6 @@ const LoginPage = () => {
         throw new Error(statusMessage);
       }
 
-      // 4) SUCCESS: trigger Edge Function
       try {
         const functionUrl =
           "https://lgbvxoyntonznxpfmtbq.supabase.co/functions/v1/send-login-email";
@@ -106,7 +192,6 @@ const LoginPage = () => {
         toast.success("Welcome back! Redirecting to your dashboard...");
         navigate("/Client");
       } catch (err) {
-        // Don’t block login if email sending fails
         console.warn("send-login-email failed:", err);
         toast.success("Welcome back! Redirecting to your dashboard...");
         navigate("/Client");
@@ -116,6 +201,19 @@ const LoginPage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const cancelOtp = async () => {
+    if (otpChallengeId) {
+      await supabase.functions.invoke("login-otp", {
+        body: { action: "cancel", challengeId: otpChallengeId },
+      });
+    }
+    setOtpChallengeId(null);
+    setOtpExpiresAt(null);
+    setOtpSecondsLeft(0);
+    setOtp("");
+    setError("");
   };
 
   return (
@@ -175,8 +273,9 @@ const LoginPage = () => {
                 Sign In
               </h1>
               <p className="text-slate-500 text-sm sm:text-base font-medium">
-                Enter your official credentials to access your private banking
-                portal.
+                {otpChallengeId
+                  ? `Enter the six-digit code sent to ${email.trim()}.`
+                  : "Enter your official credentials to access your private banking portal."}
               </p>
             </div>
 
@@ -190,7 +289,7 @@ const LoginPage = () => {
               </motion.div>
             )}
 
-            <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
+            <form onSubmit={requestOtp} className="space-y-4 sm:space-y-5">
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                   Email Address
@@ -251,7 +350,7 @@ const LoginPage = () => {
                 disabled={isLoading}
                 className="w-full py-4 sm:py-5 bg-slate-950 text-white font-black text-sm sm:text-base rounded-xl sm:rounded-2xl hover:bg-blue-700 transition-all shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 active:scale-[0.98] mt-2"
               >
-                {isLoading ? "AUTHENTICATING..." : "SECURE LOGIN"}
+                {isLoading ? "SENDING CODE..." : "CONTINUE"}
                 {!isLoading && (
                   <ArrowRight
                     size={18}
@@ -293,6 +392,105 @@ const LoginPage = () => {
           </p>
         </div>
       </section>
+
+      <AnimatePresence>
+        {otpChallengeId && (
+          <motion.div
+            className="fixed inset-0 z-100 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="login-otp-title"
+          >
+            <motion.div
+              className="w-full max-w-md rounded-3xl border border-slate-100 bg-white p-7 shadow-2xl sm:p-9"
+              initial={{ opacity: 0, y: 14, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 14, scale: 0.98 }}
+            >
+              <div className="mb-7 text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                  <ShieldCheck size={24} />
+                </div>
+                <h2
+                  id="login-otp-title"
+                  className="text-xl font-black text-slate-900"
+                >
+                  Verify your email
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Enter the six-digit code sent to {email.trim()} before
+                  continuing to your account.
+                </p>
+                <p
+                  className="mt-3 text-sm font-bold text-blue-700"
+                  aria-live="polite"
+                >
+                  Code expires in{" "}
+                  {String(Math.floor(otpSecondsLeft / 60)).padStart(2, "0")}:
+                  {String(otpSecondsLeft % 60).padStart(2, "0")}
+                </p>
+              </div>
+
+              {error && (
+                <div
+                  role="alert"
+                  className="mb-5 flex items-center gap-3 rounded-xl border border-red-100 bg-red-50 p-3 text-sm font-bold text-red-600"
+                >
+                  <AlertCircle size={18} className="shrink-0" /> {error}
+                </div>
+              )}
+
+              <form onSubmit={handleVerifyOtp} className="space-y-4">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(event) =>
+                    setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
+                  }
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-center text-2xl font-black tracking-[0.45em] outline-none transition-all focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5"
+                  placeholder="000000"
+                  aria-label="Six-digit verification code"
+                  required
+                  autoFocus
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || otp.length !== 6}
+                  className="w-full rounded-xl bg-slate-950 py-4 text-sm font-black text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isLoading ? "VERIFYING..." : "VERIFY AND SIGN IN"}
+                </button>
+              </form>
+
+              <div className="mt-5 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => void cancelOtp()}
+                  disabled={isLoading}
+                  className="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 disabled:opacity-50"
+                >
+                  Change credentials
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void requestOtp()}
+                  disabled={isLoading}
+                  className="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                >
+                  Resend code
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 };

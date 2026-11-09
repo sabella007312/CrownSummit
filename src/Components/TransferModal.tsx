@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ShieldCheck, Globe, Building2, Loader2, Lock } from "lucide-react";
+import { X, Globe, Building2, Loader2, Clock3 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../hooks/supabase";
 
@@ -9,22 +9,18 @@ interface TransferModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentBalance: number;
-  onSuccess: (amount: number, recipient: string) => void;
 }
 
 const TransferModal: React.FC<TransferModalProps> = ({
   isOpen,
   onClose,
   currentBalance,
-  onSuccess,
 }) => {
   const [step, setStep] = useState(1);
   const [type, setType] = useState<"local" | "international" | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [pin, setPin] = useState("");
-  const [activeLayerIndex, setActiveLayerIndex] = useState<number | null>(null);
-  const [isNotifying, setIsNotifying] = useState(false);
-  const [dbPins, setDbPins] = useState<any>(null);
+  const [transferPin, setTransferPin] = useState("");
+  const [authToken, setAuthToken] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     recipient: "",
@@ -40,76 +36,13 @@ const TransferModal: React.FC<TransferModalProps> = ({
   });
 
   const SECURITY_LAYERS = [
-    { threshold: 35, label: "Transfer PIN", key: "transfer_pin" },
-    { threshold: 65, label: "COT Hash", key: "cot_code" },
-    { threshold: 85, label: "Clearance/Tax Key", key: "tax_code" },
-    { threshold: 95, label: "Auth Token", key: "auth_code" },
+    { label: "Transfer PIN", key: "transfer_pin" },
+    { label: "Auth Token", key: "auth_code" },
   ];
 
-  useEffect(() => {
-    const fetchPins = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("pincodes")
-          .select("*")
-          .single();
-
-        if (error) throw error;
-        setDbPins(data);
-      } catch (err) {
-        console.error("Error fetching security keys:", err);
-      }
-    };
-
-    if (isOpen) fetchPins();
-  }, [isOpen]);
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-
-    if (step === 3 && activeLayerIndex === null && progress < 100) {
-      interval = setInterval(() => {
-        setProgress((prev) => {
-          const increment = Math.floor(Math.random() * 3) + 2;
-          const next = prev + increment;
-
-          const layerToTrigger = SECURITY_LAYERS.findIndex(
-            (layer) => next >= layer.threshold && prev < layer.threshold,
-          );
-
-          if (layerToTrigger !== -1) {
-            setActiveLayerIndex(layerToTrigger);
-            if (interval) clearInterval(interval);
-            return SECURITY_LAYERS[layerToTrigger].threshold;
-          }
-
-          if (next >= 100) {
-            if (interval) clearInterval(interval);
-            setTimeout(() => setStep(4), 800);
-            return 100;
-          }
-          return next;
-        });
-      }, 150);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [step, progress, activeLayerIndex]);
-
-  // function handling the initial notification and starting the security sequence
-  const handleStartSequence = async () => {
-    if (!dbPins) {
-      toast.error("Security System Offline. Try again.");
-      return;
-    }
-
-    setIsNotifying(true);
-    const loadingToast = toast.loading(
-      "Security notification sent to your email...",
-    );
-
+  const handleSubmitTransfer = async () => {
+    setIsSubmitting(true);
+    const loadingToast = toast.loading("Submitting transfer for review...");
     try {
       const {
         data: { session },
@@ -118,65 +51,72 @@ const TransferModal: React.FC<TransferModalProps> = ({
 
       if (!token) throw new Error("Authentication required.");
 
-      // Trigger the Edge Function (Email notification)
-      const { error } = await supabase.functions.invoke("quick-task", {
-        method: "POST",
-        body: {
-          recipient: formData.recipient,
-          beneficiaryAddress: formData.beneficiaryAddress,
-          amount: formData.amount,
-          type: type,
-          description: formData.description,
+      const { error: requestError } = await supabase.rpc(
+        "submit_transfer_request",
+        {
+          p_transfer_type: type,
+          p_recipient: formData.recipient.trim(),
+          p_beneficiary_address: formData.beneficiaryAddress.trim(),
+          p_account_number: formData.accountNumber.trim(),
+          p_bank_name: formData.bankName.trim(),
+          p_routing_number: formData.routingNumber.trim() || null,
+          p_swift: formData.swift.trim() || null,
+          p_iban: formData.iban.trim() || null,
+          p_bank_address: formData.bankAddress.trim() || null,
+          p_amount: Number(formData.amount),
+          p_description: formData.description.trim() || null,
+          p_transfer_pin: transferPin.trim(),
+          p_auth_token: authToken.trim(),
         },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      );
+
+      if (requestError) throw requestError;
+
+      const { error: notificationError } = await supabase.functions.invoke(
+        "quick-task",
+        {
+          method: "POST",
+          body: {
+            recipient: formData.recipient,
+            beneficiaryAddress: formData.beneficiaryAddress,
+            amount: formData.amount,
+            type,
+            description: formData.description,
+            status: "pending",
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
+      if (notificationError) {
+        console.error(
+          "Transfer support notification failed:",
+          notificationError,
+        );
+      }
 
-      if (error) throw error;
-
-      // SUCCESS: Move to Step 3 (The Pincode progress bar)
-      toast.success("Notification sent. Please follow security prompts.", {
+      toast.success("Transfer request submitted for review.", {
         id: loadingToast,
       });
 
       setStep(3);
-      setProgress(5); // This starts the useEffect progress bar logic
     } catch (err: any) {
-      console.error("Alert failed:", err.message);
-      toast.error("Failed to send security alert. Please try again.", {
+      console.error("Transfer request failed:", err.message);
+      toast.error(err.message || "Failed to submit transfer request.", {
         id: loadingToast,
       });
-      // We stay on Step 2 so they can try again.
     } finally {
-      setIsNotifying(false);
-    }
-  };
-
-  const handlePinSubmit = () => {
-    if (activeLayerIndex === null || !dbPins) return;
-    const pinKey = SECURITY_LAYERS[activeLayerIndex].key;
-    const correctPin = String(dbPins[pinKey]);
-
-    if (pin === correctPin) {
-      if (activeLayerIndex === SECURITY_LAYERS.length - 1) {
-        onSuccess(Number(formData.amount), formData.recipient);
-      }
-      setPin("");
-      setActiveLayerIndex(null);
-    } else {
-      toast.error("SECURITY VIOLATION: Invalid Credentials");
-      setPin("");
+      setIsSubmitting(false);
     }
   };
 
   const resetAndClose = () => {
     setStep(1);
     setType(null);
-    setProgress(0);
-    setPin("");
-    setActiveLayerIndex(null);
+    setTransferPin("");
+    setAuthToken("");
     setFormData({
       recipient: "",
       beneficiaryAddress: "",
@@ -404,102 +344,71 @@ const TransferModal: React.FC<TransferModalProps> = ({
                     />
                   </div>
 
+                  <div className="grid grid-cols-2 gap-4">
+                    {SECURITY_LAYERS.map((layer) => (
+                      <div key={layer.key}>
+                        <label className="text-[10px] font-black text-blue-600 uppercase mb-2 block">
+                          {layer.label}
+                        </label>
+                        <input
+                          type="password"
+                          inputMode="numeric"
+                          autoComplete="off"
+                          value={
+                            layer.key === "transfer_pin"
+                              ? transferPin
+                              : authToken
+                          }
+                          onChange={(e) =>
+                            layer.key === "transfer_pin"
+                              ? setTransferPin(e.target.value)
+                              : setAuthToken(e.target.value)
+                          }
+                          className="w-full border-2 border-slate-100 p-4 rounded-xl font-bold focus:border-blue-600 outline-none"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
                   <button
-                    disabled={!isFormValid() || !dbPins || isNotifying}
-                    onClick={handleStartSequence}
+                    disabled={
+                      !isFormValid() ||
+                      !transferPin.trim() ||
+                      !authToken.trim() ||
+                      isSubmitting
+                    }
+                    onClick={handleSubmitTransfer}
                     className="w-full py-5 bg-slate-950 text-white font-black rounded-2xl uppercase text-xs tracking-[0.2em] hover:bg-blue-700 transition-all disabled:opacity-50 flex items-center justify-center"
                   >
-                    {isNotifying ? (
+                    {isSubmitting ? (
                       <Loader2 className="animate-spin" size={20} />
-                    ) : dbPins ? (
-                      "Initiate Security Sequence"
                     ) : (
-                      "Syncing Security..."
+                      "Submit for Approval"
                     )}
                   </button>
                 </div>
               )}
 
               {step === 3 && (
-                <div className="h-full flex flex-col items-center justify-center space-y-8">
-                  {activeLayerIndex === null ? (
-                    <div className="w-full text-center space-y-8">
-                      <div className="relative w-32 h-32 mx-auto">
-                        <Loader2
-                          className="animate-spin text-blue-600 absolute inset-0"
-                          size={128}
-                          strokeWidth={1}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center font-black text-2xl italic text-slate-900">
-                          {progress}%
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <p className="font-black uppercase tracking-[0.3em] text-xs text-blue-600 animate-pulse">
-                          Routing via Encrypted Tunnel...
-                        </p>
-                        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                          <motion.div
-                            className="bg-blue-600 h-full"
-                            animate={{ width: `${progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <motion.div
-                      initial={{ scale: 0.9, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className="w-full max-w-sm p-10 bg-slate-950 text-white rounded-[3rem] text-center shadow-2xl border-b-12 border-blue-600"
-                    >
-                      <Lock className="mx-auto mb-6 text-blue-400" size={48} />
-                      <div className="mb-8">
-                        <h3 className="font-black uppercase italic text-2xl mb-1">
-                          Provide Code
-                        </h3>
-                        <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest">
-                          Kindly Provide your{" "}
-                          {SECURITY_LAYERS[activeLayerIndex].label}
-                        </p>
-                      </div>
-                      <input
-                        type="password"
-                        maxLength={6}
-                        value={pin}
-                        onChange={(e) => setPin(e.target.value)}
-                        className="w-full text-center text-4xl tracking-[0.5em] font-black p-5 bg-slate-900 border-2 border-slate-800 rounded-3xl outline-none focus:border-blue-500 mb-8"
-                        autoFocus
-                      />
-                      <button
-                        onClick={handlePinSubmit}
-                        className="w-full py-5 bg-blue-600 text-white font-black rounded-2xl uppercase text-xs tracking-widest hover:bg-blue-500 transition-colors"
-                      >
-                        Verify Identity
-                      </button>
-                    </motion.div>
-                  )}
-                </div>
-              )}
-
-              {step === 4 && (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-8">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center text-white shadow-2xl shadow-green-500/40"
+                    className="w-32 h-32 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-2xl shadow-blue-600/40"
                   >
-                    <ShieldCheck size={64} />
+                    <Clock3 size={64} />
                   </motion.div>
                   <div className="space-y-3">
                     <h3 className="text-5xl font-black text-slate-900 uppercase italic">
-                      Successful Transfer
+                      Transfer Pending
                     </h3>
                     <p className="text-slate-500 font-medium max-w-xs">
-                      Institutional wire of{" "}
+                      Your transfer of{" "}
                       <span className="text-slate-900 font-black">
                         USD {Number(formData.amount).toLocaleString()}
                       </span>{" "}
-                      has been dispatched to {formData.recipient}.
+                      to {formData.recipient} is awaiting confirmation. Please
+                      contact our support service for transfer confirmation.
                     </p>
                   </div>
                   <button
