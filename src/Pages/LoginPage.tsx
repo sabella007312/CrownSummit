@@ -42,18 +42,16 @@ const LoginPage = () => {
 
       if (remaining === 0) {
         if (interval) clearInterval(interval);
-        setOtpChallengeId(null);
-        setOtpExpiresAt(null);
         setOtp("");
-        setError(
-          "Your code expired. Enter your credentials to request a new one.",
-        );
-        toast.error("Verification code expired. Please request a new code.");
+        setError("Your code expired. Resend a fresh code to continue.");
+        toast.error("Verification code expired. You can resend a fresh code.");
       }
     };
 
     updateCountdown();
-    interval = setInterval(updateCountdown, 1000);
+    if (Date.now() < otpExpiresAt) {
+      interval = setInterval(updateCountdown, 1000);
+    }
 
     return () => {
       if (interval) clearInterval(interval);
@@ -425,12 +423,12 @@ const LoginPage = () => {
                   continuing to your account.
                 </p>
                 <p
-                  className="mt-3 text-sm font-bold text-blue-700"
+                  className={`mt-3 text-sm font-bold ${otpSecondsLeft > 0 ? "text-blue-700" : "text-red-600"}`}
                   aria-live="polite"
                 >
-                  Code expires in{" "}
-                  {String(Math.floor(otpSecondsLeft / 60)).padStart(2, "0")}:
-                  {String(otpSecondsLeft % 60).padStart(2, "0")}
+                  {otpSecondsLeft > 0
+                    ? `Code expires in ${String(Math.floor(otpSecondsLeft / 60)).padStart(2, "0")}:${String(otpSecondsLeft % 60).padStart(2, "0")}`
+                    : "Code expired. Resend a fresh code to continue."}
                 </p>
               </div>
 
@@ -454,6 +452,7 @@ const LoginPage = () => {
                   onChange={(event) =>
                     setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))
                   }
+                  disabled={otpSecondsLeft === 0}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-center text-2xl font-black tracking-[0.45em] outline-none transition-all focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5"
                   placeholder="000000"
                   aria-label="Six-digit verification code"
@@ -462,7 +461,9 @@ const LoginPage = () => {
                 />
                 <button
                   type="submit"
-                  disabled={isLoading || otp.length !== 6}
+                  disabled={
+                    isLoading || otpSecondsLeft === 0 || otp.length !== 6
+                  }
                   className="w-full rounded-xl bg-slate-950 py-4 text-sm font-black text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                 >
                   {isLoading ? "VERIFYING..." : "VERIFY AND SIGN IN"}
@@ -481,10 +482,12 @@ const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => void requestOtp()}
-                  disabled={isLoading}
+                  disabled={isLoading || otpSecondsLeft > 0}
                   className="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-800 disabled:opacity-50"
                 >
-                  Resend code
+                  {otpSecondsLeft > 0
+                    ? `Resend in ${String(Math.floor(otpSecondsLeft / 60)).padStart(2, "0")}:${String(otpSecondsLeft % 60).padStart(2, "0")}`
+                    : "Resend code"}
                 </button>
               </div>
             </motion.div>
