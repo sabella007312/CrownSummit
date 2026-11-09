@@ -16,6 +16,19 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+const getFunctionErrorMessage = async (error: any, fallback: string) => {
+  const response = error?.context;
+  if (response && typeof response.clone === "function") {
+    try {
+      const body = await response.clone().json();
+      if (typeof body?.error === "string") return body.error;
+    } catch {
+      // Fall back to the SDK error when the response has no JSON body.
+    }
+  }
+  return fallback;
+};
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,8 +84,15 @@ const LoginPage = () => {
         },
       );
 
-      if (requestError) throw requestError;
-      if (data?.error) throw new Error(data.error);
+      if (requestError) {
+        throw new Error(
+          await getFunctionErrorMessage(
+            requestError,
+            "Unable to send the verification code.",
+          ),
+        );
+      }
+      if (data?.error) throw new Error(String(data.error));
       if (!data?.challengeId)
         throw new Error("Could not start OTP verification.");
       const expiresAt = new Date(data.expiresAt).getTime();
@@ -112,10 +132,29 @@ const LoginPage = () => {
           },
         });
 
-      if (verificationError) throw verificationError;
-      if (verification?.error) throw new Error(verification.error);
+      if (verificationError) {
+        const message = await getFunctionErrorMessage(
+          verificationError,
+          "Unable to verify the code.",
+        );
+        throw new Error(
+          /code.*invalid|invalid.*code|code.*expired/i.test(message)
+            ? "That code is incorrect or expired. Check it and try again."
+            : message,
+        );
+      }
+      if (verification?.error) {
+        const message = String(verification.error);
+        throw new Error(
+          /code.*invalid|invalid.*code|code.*expired/i.test(message)
+            ? "That code is incorrect or expired. Check it and try again."
+            : message,
+        );
+      }
       if (!verification?.verified) {
-        throw new Error("The verification code is invalid or expired.");
+        throw new Error(
+          "That code is incorrect or expired. Check it and try again.",
+        );
       }
 
       // Establish the persistent session only after OTP verification.
